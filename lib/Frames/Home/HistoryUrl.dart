@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:neticket/Controllers/RouterController.dart';
+import 'package:neticket/Frames/Admin/index.dart';
 import 'package:neticket/Frames/Schemas/router.dart';
 
 bool matchRouter(NRouter router, String searchText) {
@@ -8,7 +9,8 @@ bool matchRouter(NRouter router, String searchText) {
       router.host.toLowerCase().contains(searchText.toLowerCase());
 }
 
-List<Card> HistoryUrl(BuildContext context, List<NRouter> routerList,Function action) {
+List<Card> HistoryUrl(
+    BuildContext context, List<NRouter> routerList, Function action) {
   List<Card> routerCards = [];
   routerList.forEach((router) {
     routerCards.add(Card(
@@ -39,12 +41,13 @@ List<Card> HistoryUrl(BuildContext context, List<NRouter> routerList,Function ac
   return routerCards;
 }
 
-void _showRouterBottomSheet(BuildContext context, NRouter router, Function action) {
+void _showRouterBottomSheet(
+    BuildContext context, NRouter router, Function action) {
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) {
       return Container(
-        width: 500,
+          width: 500,
           padding: EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
@@ -59,58 +62,67 @@ void _showRouterBottomSheet(BuildContext context, NRouter router, Function actio
                 Text('Host: ${router.host}'),
                 Text('Date Saved: ${router.getDateSaved()}'),
                 const SizedBox(height: 16.0),
-                Row(children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      if(RouterController.deleteRouter(router)){
-                        action();
-                      }
-                      Navigator.pop(context);
-                    },
-
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.delete,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(width: 8), // Add some spacing between the icon and text
-                        Text(
-                          'Delete',
-                          style: TextStyle(
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        if (RouterController.deleteRouter(router)) {
+                          action();
+                        }
+                        Navigator.pop(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.delete,
                             color: Colors.grey,
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                              width:
+                                  8), // Add some spacing between the icon and text
+                          Text(
+                            'Delete',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.orange)),
-
-                    child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.login,
-                        color: Colors.white,
+                    SizedBox(width: 16.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminScreen(router: router)));
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.orange)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.login,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                              width:
+                                  8), // Add some spacing between the icon and text
+                          Text(
+                            'Connect',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 8), // Add some spacing between the icon and text
-                      Text(
-                        'Connect',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  ),
-                ],)
-
+                    ),
+                  ],
+                )
               ],
             ),
           ));
