@@ -18,8 +18,8 @@ class RouterController {
     NRouter(
       username: 'user1',
       password: 'pass1',
-      host: 'host4.com',
-      name: 'Router4',
+      host: 'host3.com',
+      name: 'Router3',
     ),
     NRouter(
       username: 'user2',

@@ -1,48 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:neticket/Controllers/RouterController.dart';
+import 'package:neticket/Controllers/ProfilController.dart';
+import 'package:neticket/Frames/Admin/Profils/AddProfil.dart';
 import 'package:neticket/Frames/Admin/index.dart';
-import 'package:neticket/Frames/Schemas/router.dart';
+import 'package:neticket/Frames/Schemas/profil.dart';
 
-bool matchRouter(NRouter router, String searchText) {
-  return router.name.toLowerCase().contains(searchText.toLowerCase()) ||
-      router.host.toLowerCase().contains(searchText.toLowerCase());
+bool matchProfil(NProfil profil, String searchText) {
+  return profil.profileName.toLowerCase().contains(searchText.toLowerCase());
 }
 
-List<Card> HistoryUrl(
-    BuildContext context, List<NRouter> routerList, Function action) {
-  List<Card> routerCards = [];
-  routerList.forEach((router) {
-    routerCards.add(Card(
+List<Card> History(
+    BuildContext context, List<NProfil> profilList, Function action) {
+  List<Card> profilCards = [];
+  profilList.forEach((profil) {
+    profilCards.add(Card(
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         elevation: 4,
         child: GestureDetector(
-          onTap: () => {_showRouterBottomSheet(context, router, action)},
+          onTap: () => {_showProfilBottomSheet(context, profil, action)},
           child: ListTile(
             leading: const CircleAvatar(
               backgroundColor: Colors.grey, // Use any default color you prefer
-              child: Icon(Icons.router), // Use any default icon you prefer
+              child: Icon(Icons.verified_user), // Use any default icon you prefer
             ),
             title: Text(
-              router.name,
+              profil.profileName,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Host: ${router.host}"),
-                Text("Date Saved: ${router.getDateSaved()}"),
+                Text("Date Saved: ${profil.getDateSaved()}"),
               ],
             ),
           ),
         )));
   });
 
-  return routerCards;
+  return profilCards;
 }
 
-void _showRouterBottomSheet(
-    BuildContext context, NRouter router, Function action) {
+
+void _showProfilBottomSheet(
+    BuildContext context, NProfil profil, Function action) {
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) {
@@ -54,19 +54,30 @@ void _showRouterBottomSheet(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Router Information',
+                Text('Profil Information',
                     style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                    TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
                 SizedBox(height: 16.0),
-                Text('Router: ${router.name}'),
-                Text('Host: ${router.host}'),
-                Text('Date Saved: ${router.getDateSaved()}'),
+                Text('Profil: ${profil.profileName}'),
+                Text('Validite: ${profil.validite}'),
+                Text('Shared User: ${profil.sharedUser}'),
+                Text('Upload: ${profil.upload}'),
+                Text('Download: ${profil.download}'),
+                Text('Servers: ${profil.servers}'),
+                Text('Forfait: ${profil.forfait}'),
+                Text('Prix Unitaire: ${profil.prixUnitaire}'),
+                Text('Limite Heure: ${profil.limiteHeure}'),
+                Text('Limite Heure Jour: ${profil.limiteHeureJour}'),
+                Text('Limite Mega: ${profil.limiteMega}'),
+                Text('Unity: ${profil.unity}'),
+
+                Text('Date Saved: ${profil.getDateSaved()}'),
                 const SizedBox(height: 16.0),
                 Row(
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        if (RouterController.deleteRouter(router)) {
+                        if (ProfilController.deleteProfil(profil)) {
                           action();
                         }
                         Navigator.pop(context);
@@ -80,7 +91,7 @@ void _showRouterBottomSheet(
                           ),
                           SizedBox(
                               width:
-                                  8), // Add some spacing between the icon and text
+                              8), // Add some spacing between the icon and text
                           Text(
                             'Delete',
                             style: TextStyle(
@@ -90,30 +101,31 @@ void _showRouterBottomSheet(
                         ],
                       ),
                     ),
-                    SizedBox(width: 16.0),
+                    SizedBox(width:10),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminScreen(router: router)));
-                      },
                       style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.orange)),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.orange), // Set your desired background color here
+                      ),
+                      onPressed: () {
+                       //Edit
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> AddProfilsPage(profil: profil)))
+                        .then((result) {
+                        Navigator.pop(context);
+                        action();
+                        });
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.login,
+                            Icons.edit,
                             color: Colors.white,
                           ),
                           SizedBox(
                               width:
-                                  8), // Add some spacing between the icon and text
+                              8), // Add some spacing between the icon and text
                           Text(
-                            'Connect',
+                            'Edit',
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -121,11 +133,14 @@ void _showRouterBottomSheet(
                         ],
                       ),
                     ),
-                  ],
+                   ],
                 )
               ],
             ),
           ));
     },
   );
+
+
+
 }

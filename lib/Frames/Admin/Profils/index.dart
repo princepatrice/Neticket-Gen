@@ -2,19 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:neticket/Controllers/RouterController.dart';
-import 'package:neticket/Frames/Home/AddRouter.dart';
-import 'package:neticket/Frames/Home/HistoryUrl.dart';
-import 'package:neticket/Frames/Schemas/router.dart';
+import 'package:neticket/Controllers/ProfilController.dart';
+import 'package:neticket/Frames/Admin/Profils/AddProfil.dart';
+import 'package:neticket/Frames/Admin/Profils/History.dart';
+import 'package:neticket/Frames/Schemas/profil.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class ProfilScreen extends StatefulWidget {
+  const ProfilScreen({super.key});
   @override
-  State<HomeScreen> createState() => HomeScreenState();
+  State<ProfilScreen> createState() => ProfilScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
-  late List<NRouter> routers;
+class ProfilScreenState extends State<ProfilScreen> {
+  late List<NProfil> profils;
   List<Card> listJobCards = [];
   bool _isSearching = false;
   Timer? _searchDebounce;
@@ -24,8 +24,8 @@ class HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    routers = RouterController.getHistoryRouter();
-    listJobCards = HistoryUrl(context, routers, () => {RefreshList()});
+    profils = ProfilController.getHistoryProfil();
+    listJobCards = History(context, profils, () => {RefreshList()});
   }
 
   @override
@@ -40,12 +40,12 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            "Neticket (Ticket Generator)",
+            "Profils",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           leading: Padding(
             padding: const EdgeInsets.only(left:10),
-            child: Image.asset('assets/logo/ico.png', width: 40.0, height: 40.0) ,)
+            child: Icon(Icons.verified_user, size: 40,))
           ,
           backgroundColor: Colors.orange,
         ),
@@ -66,7 +66,7 @@ class HomeScreenState extends State<HomeScreen> {
         child: TextField(
             controller: _searchController,
             decoration: const InputDecoration(
-              hintText: 'Search ...',
+              hintText: 'Search Profil...',
               prefixIcon: Icon(Icons.search),
             ),
             onChanged: _onSearchTextChanged));
@@ -82,24 +82,24 @@ class HomeScreenState extends State<HomeScreen> {
         _isSearching = true;
       });
 
-      List<NRouter> routerFiltered = routers
-          .where((router) => matchRouter(router, text))
+      List<NProfil> profilFiltered = profils
+          .where((profil) => matchProfil(profil, text))
           .toList(growable: true);
 
       setState(() {
         _isSearching = false;
-        // Update your UI with the filtered router list
-        listJobCards = HistoryUrl(context, routerFiltered, () => {RefreshList()});
+        // Update your UI with the filtered profil list
+        listJobCards = History(context, profilFiltered, () => {RefreshList()});
       });
     });
   }
 
   void RefreshList() {
     setState(() {
-      // Update your UI with the filtered router list
-      routers = RouterController.getHistoryRouter();
-      listJobCards = HistoryUrl(
-          context, RouterController.getHistoryRouter(), () => {RefreshList()});
+      // Update your UI with the filtered profil list
+      profils = ProfilController.getHistoryProfil();
+      listJobCards = History(
+          context, ProfilController.getHistoryProfil(), () => {RefreshList()});
     });
   }
 
@@ -116,15 +116,18 @@ class HomeScreenState extends State<HomeScreen> {
                 borderRadius:
                 BorderRadius.circular(30.0), // Adjust the radius as needed
               ),
-              onPressed: () => addRouter(),
-              tooltip: 'Add Router',
+              onPressed: () => addProfil(),
+              tooltip: 'Add Profil',
               child: const Icon(Icons.add),
             )),
       ],
     );
   }
 
-  void addRouter() {
-    addBottomSheet(context, () => {RefreshList()});
+  void addProfil() {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> AddProfilsPage(profil: NProfil())))
+        .then((result) {
+      RefreshList();
+    });
   }
 }

@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:neticket/Frames/Admin/Dashboard/index.dart';
 import 'package:neticket/Frames/Admin/Hospot/index.dart';
-import 'package:neticket/Frames/Admin/Profiles/index.dart';
+import 'package:neticket/Frames/Admin/Profils/index.dart';
 import 'package:neticket/Frames/Admin/Settings/index.dart';
 import 'package:neticket/Frames/Admin/Tickets/index.dart';
 import 'package:neticket/Frames/Home/index.dart';
@@ -22,7 +22,7 @@ class AdminScreenState extends State<AdminScreen> {
   final Map<Screen, Widget> MenuPages = {
     Screen.Dashboard: DashboardScreen(),
     Screen.Hostpot: HospotScreen(),
-    Screen.Profiles: ProfilesScreen(),
+    Screen.Profiles: ProfilScreen(),
     Screen.Tickets: TicketsScreen(),
     Screen.Settings: SettingsScreen()
   };
@@ -75,7 +75,7 @@ class AdminScreenState extends State<AdminScreen> {
               ),
               MenuItem(Icons.dashboard, "Dashboard",
                   () => {changeScreen(Screen.Dashboard)}),
-              MenuItem(Icons.verified_user_rounded, "Profile",
+              MenuItem(Icons.verified_user_rounded, "Profils",
                   () => {changeScreen(Screen.Profiles)}),
               MenuItem(Icons.account_circle_outlined, "Hospots",
                   () => {changeScreen(Screen.Hostpot)}),
