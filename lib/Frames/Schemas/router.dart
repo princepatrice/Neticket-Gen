@@ -1,15 +1,18 @@
 class NRouter {
   String username;
   String password;
+  String serial;
   String host;
   String name;
-  DateTime dateSaved = DateTime.now();
+  DateTime dateSaved =  DateTime.now();
 
   NRouter({
     required this.username,
+    required this.serial,
     required this.password,
     required this.host,
     required this.name
+
   });
 
   String getDateSaved(){

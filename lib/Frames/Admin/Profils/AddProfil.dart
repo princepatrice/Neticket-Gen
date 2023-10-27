@@ -151,7 +151,6 @@ class _AddProfilsPageState extends State<AddProfilsPage> {
                   );
                 }
 
-
               },
               child: Text('Save'),
             ),

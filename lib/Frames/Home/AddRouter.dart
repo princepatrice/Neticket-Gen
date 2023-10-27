@@ -22,6 +22,7 @@ Widget addRouterWidget(context, action) {
   TextEditingController urlController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
   return Container(
     child: Column(
@@ -55,32 +56,34 @@ Widget addRouterWidget(context, action) {
         ),
         SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () {
-            //Action
-            if (isValidText(userNameController.text) &&
-                isValidText(urlController.text) &&
-                isValidText(passwordController.text)) {
-              if (RouterController.instance.addRouter(urlController.text,
-                  userNameController.text, passwordController.text)) {
-                action();
-                Navigator.of(context).pop();
+            onPressed: () {
+              //Action
+              if (isValidText(userNameController.text) &&
+                  isValidText(urlController.text) &&
+                  isValidText(passwordController.text)) {
+                RouterController.instance
+                    .addRouter(urlController.text, userNameController.text,
+                        passwordController.text)
+                    .then((status) {
+                  if (status) {
+                    action();
+                    Navigator.of(context).pop();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      elevation: 2,
+                      content: Text('Unable to connect with the router.'),
+                    ));
+                  }
+                });
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Information provided are incorrect'),
+                    content: Text('Fill all the field'),
                   ),
                 );
               }
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Fill all the field'),
-                ),
-              );
-            }
-          },
-          child: const Text('add Router'),
-        ),
+            },
+            child: const Text('add Router')),
         SizedBox(height: 10),
       ],
     ),

@@ -31,7 +31,7 @@ List<Card> HistoryUrl(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Host: ${router.host}"),
-                Text("Date Saved: ${router.getDateSaved()}"),
+                Text("Serial: ${router.serial}"),
               ],
             ),
           ),
@@ -60,6 +60,7 @@ void _showRouterBottomSheet(
                 SizedBox(height: 16.0),
                 Text('Router: ${router.name}'),
                 Text('Host: ${router.host}'),
+                Text('Serial: ${router.serial}'),
                 Text('Date Saved: ${router.getDateSaved()}'),
                 const SizedBox(height: 16.0),
                 Row(
